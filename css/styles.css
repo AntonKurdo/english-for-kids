@@ -337,3 +337,7 @@ nav ul li:nth-of-type(n+2) {
   font-weight: bold;
   color: red;
 }
+.comment {
+  color: grey;
+  font-size: 17px;
+}

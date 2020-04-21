@@ -867,14 +867,13 @@ function gameBegin(arr) {
         newArr.push(obj)
     })
 
+    function shuffle(arr) {
+        arr.sort(() => Math.random() - 0.5);
+    }
+    shuffle(newArr);
 
-function shuffle(arr) {
-    arr.sort(() => Math.random() - 0.5);
-}
-shuffle(newArr);
-
-let sound = new Audio(newArr[0].audio);
-sound.play();
+    let sound = new Audio(newArr[0].audio);
+    sound.play();
 
 }
 
@@ -907,6 +906,35 @@ function cardClick(arr) {
                 setTimeout(() => {
                     document.querySelector('.result_cont').innerHTML = `You've made  <span>${mistakes}</span> mistake(-s)`;
                     document.querySelector('.modal_result').classList.add('_active_mode');
+                    playAgain();
+                    let comment = document.querySelector('.comment')
+                    if (mistakes === 0) {
+                        comment.textContent = 'Excellent!!! No mistakes! Well done!'
+                    }
+                    if (mistakes === 1) {
+                        comment.textContent = 'Absolutely!!! Only one mistake! You are so clever!'
+                    }
+                    if (mistakes === 2) {
+                        comment.textContent = 'Very good result! We believe, you can do it better next time'
+                    }
+                    if (mistakes === 3) {
+                        comment.textContent = 'More then half!!! Definitely you have a very high potential!'
+                    }
+                    if (mistakes === 4) {
+                        comment.textContent = 'Half!!! Not bad, but you need to be more diligent'
+                    }
+                    if (mistakes === 5) {
+                        comment.textContent = 'Not bad!!! There is room to grow)'
+                    }
+                    if (mistakes === 6) {
+                        comment.textContent = 'You have only three right answers, but it is a lucky number!'
+                    }
+                    if (mistakes === 7) {
+                        comment.textContent = 'You need to remember some word!'
+                    }
+                    if (mistakes === 8) {
+                        comment.textContent = "Don't get upset, next time it will be better!"
+                    }
 
                 }, 1000)
 
@@ -937,5 +965,12 @@ function cardClick(arr) {
                 }
             }
         }
+    })
+}
+
+function playAgain() {
+    document.querySelector('.btn_play_again').addEventListener('click', () => {
+       location.reload();
+        
     })
 }
