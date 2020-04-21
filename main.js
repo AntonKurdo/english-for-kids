@@ -809,7 +809,7 @@ function renderCardsInPM(arr) {
  <div class='front'>
      <div id='${item.id}' class="card border-info mb-3" style="max-width: 20rem;">
          <div id='${item.id}' class="card-body">
-             <div id='${item.id}' class="img_cont"><img id='${item.id}' src="${item.img}" alt=""></div>
+             <div id='${item.id}' class="img_cont"><img class = 'tap_img' id='${item.id}' src="${item.img}" alt=""></div>
          </div>
      </div>
  </div>
@@ -822,19 +822,120 @@ function renderCardsInPM(arr) {
 
 
 
-// document.addEventListener('click', (evt) => {
-//         if(evt.target.getAttribute('class') === 'btn btn_start_game btn-danger') {
-//             evt.preventDefault();
-//             if(evt.target.getAttribute('id') === '1') {
-//                 console.log('hohooh')
-//             }
-
-//         }
-
-
-
-// })
 
 //Game Logic
 
+let count = 1;
+let newArr = [];
 
+document.addEventListener('click', (evt) => {
+    if (evt.target.getAttribute('class') === 'btn btn_start_game btn-danger') {
+
+        if (evt.target.getAttribute('id') === '1') {
+            gameBegin(animals1)
+        }
+        if (evt.target.getAttribute('id') === '2') {
+            gameBegin(animals2)
+        }
+        if (evt.target.getAttribute('id') === '3') {
+            gameBegin(clothes)
+        }
+        if (evt.target.getAttribute('id') === '4') {
+            gameBegin(emotions)
+        }
+        if (evt.target.getAttribute('id') === '5') {
+            gameBegin(professions)
+        }
+        if (evt.target.getAttribute('id') === '6') {
+            gameBegin(actions1)
+        }
+        if (evt.target.getAttribute('id') === '7') {
+            gameBegin(actions2)
+        }
+        if (evt.target.getAttribute('id') === '8') {
+            gameBegin(actions3)
+        }
+    }
+})
+
+function gameBegin(arr) {
+    arr.forEach(item => {
+        let obj = {
+            'id': item.id,
+            'audio': item.audio
+        }
+        newArr.push(obj)
+    })
+
+
+function shuffle(arr) {
+    arr.sort(() => Math.random() - 0.5);
+}
+shuffle(newArr);
+
+let sound = new Audio(newArr[0].audio);
+sound.play();
+
+}
+
+
+let prevCount = 0;
+cardClick(newArr);
+let result = []
+
+function cardClick(arr) {
+    document.addEventListener('click', (evt) => {
+        if (evt.target.getAttribute('class') === 'card-body' || evt.target.getAttribute('class') === 'tap_img' && count <= 8) {
+            if (count === 8 && arr[prevCount].id === evt.target.getAttribute('id')) {
+                let okSound = new Audio('assets/audio/ok.mp3')
+                okSound.play();
+                result.push(true);
+                evt.target.closest('.card-body').style.filter = 'brightness(0.3)';
+                const iconOkCont = document.createElement('div');
+                iconOkCont.classList.add('icon_ok');
+                const iconOk = document.createElement('img');
+                iconOk.setAttribute('src', 'assets/img/ok.svg');
+                iconOkCont.appendChild(iconOk);
+                evt.target.closest('.card').querySelector('.img_cont').appendChild(iconOkCont);
+                count += 1;
+                let mistakes = 0;
+                result.forEach(item => {
+                    if (item === false) {
+                        mistakes++
+                    }
+                })
+                setTimeout(() => {
+                    document.querySelector('.result_cont').innerHTML = `You've made  <span>${mistakes}</span> mistake(-s)`;
+                    document.querySelector('.modal_result').classList.add('_active_mode');
+
+                }, 1000)
+
+
+            } else {
+                if (arr[prevCount].id === evt.target.getAttribute('id')) {
+                    let okSound = new Audio('assets/audio/ok.mp3')
+                    okSound.play();
+                    result.push(true);
+                    evt.target.closest('.card-body').style.filter = 'brightness(0.3)';
+
+                    const iconOkCont = document.createElement('div');
+                    iconOkCont.classList.add('icon_ok');
+                    const iconOk = document.createElement('img');
+                    iconOk.setAttribute('src', 'assets/img/ok.svg');
+                    iconOkCont.appendChild(iconOk);
+                    evt.target.closest('.card').querySelector('.img_cont').appendChild(iconOkCont);
+                    setTimeout(() => {
+                        let sound = new Audio(arr[count].audio);
+                        sound.play();
+                        prevCount += 1;
+                        count += 1;
+                    }, 1000);
+                } else {
+                    let errorSound = new Audio('assets/audio/error.mp3');
+                    errorSound.play();
+                    result.push(false)
+                }
+            }
+        }
+    })
+}
