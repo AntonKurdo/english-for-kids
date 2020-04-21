@@ -608,6 +608,7 @@ document.addEventListener('click', (evt) => {
             renderCardsInPM(animals1)
         }
         themeTurn();
+
     }
 
     //Animals(Set 2)
@@ -713,6 +714,7 @@ document.querySelector('.onoffswitch').addEventListener('change', () => {
     themeTurn();
     if (!state.isTrainMode && state.isHome === false) {
         if (state.pageNumber === '1') {
+            
             renderCardsInPM(animals1);
             themeTurn();
         }
@@ -750,6 +752,7 @@ document.querySelector('.onoffswitch').addEventListener('change', () => {
         if (state.pageNumber === '1') {
             render('.animals_1', animals1);
             themeTurn();
+
         }
         if (state.pageNumber === '2') {
             render('.animals_2', animals2);
@@ -827,33 +830,33 @@ function renderCardsInPM(arr) {
 
 let count = 1;
 let newArr = [];
-
+let sounds = [];
 document.addEventListener('click', (evt) => {
     if (evt.target.getAttribute('class') === 'btn btn_start_game btn-danger') {
 
         if (evt.target.getAttribute('id') === '1') {
-            gameBegin(animals1)
+            gameBegin(animals1);
         }
         if (evt.target.getAttribute('id') === '2') {
-            gameBegin(animals2)
+            gameBegin(animals2);
         }
         if (evt.target.getAttribute('id') === '3') {
-            gameBegin(clothes)
+            gameBegin(clothes);
         }
         if (evt.target.getAttribute('id') === '4') {
-            gameBegin(emotions)
+            gameBegin(emotions);
         }
         if (evt.target.getAttribute('id') === '5') {
-            gameBegin(professions)
+            gameBegin(professions);
         }
         if (evt.target.getAttribute('id') === '6') {
-            gameBegin(actions1)
+            gameBegin(actions1);
         }
         if (evt.target.getAttribute('id') === '7') {
-            gameBegin(actions2)
+            gameBegin(actions2);
         }
         if (evt.target.getAttribute('id') === '8') {
-            gameBegin(actions3)
+            gameBegin(actions3);
         }
     }
 })
@@ -864,7 +867,7 @@ function gameBegin(arr) {
             'id': item.id,
             'audio': item.audio
         }
-        newArr.push(obj)
+        newArr.push(obj);
     })
 
     function shuffle(arr) {
@@ -874,18 +877,30 @@ function gameBegin(arr) {
 
     let sound = new Audio(newArr[0].audio);
     sound.play();
+    cardClick(newArr);
+   
+
+    document.querySelector('.btn_start_game').remove();
+    let btnRepeat = document.createElement('button');
+    btnRepeat.innerHTML = '<i class="fas fa-redo-alt"></i>';
+    btnRepeat.classList.add('btn');
+    btnRepeat.classList.add('btn-info');
+    document.querySelector('.main').append(btnRepeat);
+    sounds.push(sound);
+    repeatWord(sounds);
 
 }
 
 
 let prevCount = 0;
-cardClick(newArr);
+
 let result = []
 
 function cardClick(arr) {
     document.addEventListener('click', (evt) => {
         if (evt.target.getAttribute('class') === 'card-body' || evt.target.getAttribute('class') === 'tap_img' && count <= 8) {
             if (count === 8 && arr[prevCount].id === evt.target.getAttribute('id')) {
+                
                 let okSound = new Audio('assets/audio/ok.mp3')
                 okSound.play();
                 result.push(true);
@@ -944,6 +959,7 @@ function cardClick(arr) {
                     let okSound = new Audio('assets/audio/ok.mp3')
                     okSound.play();
                     result.push(true);
+                  
                     evt.target.closest('.card-body').style.filter = 'brightness(0.3)';
 
                     const iconOkCont = document.createElement('div');
@@ -957,6 +973,8 @@ function cardClick(arr) {
                         sound.play();
                         prevCount += 1;
                         count += 1;
+                        sounds.push(sound)
+                        repeatWord(sounds);
                     }, 1000);
                 } else {
                     let errorSound = new Audio('assets/audio/error.mp3');
@@ -970,7 +988,13 @@ function cardClick(arr) {
 
 function playAgain() {
     document.querySelector('.btn_play_again').addEventListener('click', () => {
-       location.reload();
-        
+        location.reload();
+
+    })
+}
+
+function repeatWord(arr) {
+    document.querySelector('.btn-info').addEventListener('click', () => {
+        arr[arr.length - 1].play();
     })
 }
