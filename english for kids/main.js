@@ -522,12 +522,15 @@ let state = {
 
 
 document.addEventListener('click', (evt) => {
+
     if (evt.target === navBtn || evt.target == span) {
+
         nav.classList.toggle('open_close');
         document.querySelector('.menu-btn').classList.toggle('_active');
     }
 
 })
+
 
 function drawTable() {
 
@@ -714,7 +717,7 @@ document.querySelector('.onoffswitch').addEventListener('change', () => {
     themeTurn();
     if (!state.isTrainMode && state.isHome === false) {
         if (state.pageNumber === '1') {
-            
+
             renderCardsInPM(animals1);
             themeTurn();
         }
@@ -878,7 +881,7 @@ function gameBegin(arr) {
     let sound = new Audio(newArr[0].audio);
     sound.play();
     cardClick(newArr);
-   
+
 
     document.querySelector('.btn_start_game').remove();
     let btnRepeat = document.createElement('button');
@@ -900,7 +903,7 @@ function cardClick(arr) {
     document.addEventListener('click', (evt) => {
         if (evt.target.getAttribute('class') === 'card-body' || evt.target.getAttribute('class') === 'tap_img' && count <= 8) {
             if (count === 8 && arr[prevCount].id === evt.target.getAttribute('id')) {
-                
+
                 let okSound = new Audio('assets/audio/ok.mp3')
                 okSound.play();
                 result.push(true);
@@ -959,7 +962,7 @@ function cardClick(arr) {
                     let okSound = new Audio('assets/audio/ok.mp3')
                     okSound.play();
                     result.push(true);
-                  
+
                     evt.target.closest('.card-body').style.filter = 'brightness(0.3)';
 
                     const iconOkCont = document.createElement('div');
@@ -986,15 +989,16 @@ function cardClick(arr) {
     })
 }
 
-function playAgain() {
-    document.querySelector('.btn_play_again').addEventListener('click', () => {
-        location.reload();
 
-    })
-}
 
 function repeatWord(arr) {
     document.querySelector('.btn-info').addEventListener('click', () => {
         arr[arr.length - 1].play();
+    })
+}
+
+function playAgain() {
+    document.querySelector('.btn_play_again').addEventListener('click', () => {
+        location.reload();
     })
 }
